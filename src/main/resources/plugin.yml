@@ -1,0 +1,22 @@
+name: PolygonPhysicalFeatures
+version: '${project.version}'
+api-version: '1.18'
+main: org.s1queence.plugin.PolygonPhysicalFeatures
+depend:
+  - S1queenceLib
+  - GSit
+commands:
+  polygonPhysicalFeatures:
+    usage: /ppf reload
+    permission: ppf.perms.reload
+    aliases:
+      - ppf
+  setPlayerFall:
+    usage: /setPlayerFall <player> <seconds>
+    permission: op
+  getUpPlayer:
+    usage: /getUpPlayer <player>
+    permission: op
+  getMySpeed:
+    usage: /getMySpeed
+    permission: op

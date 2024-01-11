@@ -1,0 +1,61 @@
+# reload permission - ppf.perms.reload
+
+# %plugin% - название плагина
+# %hits_left% - количество ударов осталось, до того, как дерево упадёт.
+# %username% - ник игрока
+
+onEnable_msg: "%plugin% &aБыл включен!"
+onDisable_msg: "%plugin% &cБыл выключен!"
+onReload_msg: "%plugin% &aКонфиг был обновлён!"
+player_not_found: "&cИгрок не найден!"
+player_is_now_up: "&a%username% снова может ходить!"
+seconds_value_is_nan: "&cВведённое вами значение секунд не является числом!"
+nothing_is_changed: "&eНичего не изменилось!"
+player_fall_by_command: "&a%username% теперь лежит на земле!"
+overweight_alert: "&cВы перегружены!"
+cant_open_inventory_with_heavy_item: "Вы не можете этого сделать: у вас заняты руки!"
+
+# Оставить пробел, если хочешь убрать отображение конкретного сообщения (иначе не будет работать).
+fall_process:
+  every_tick: #рекомендую использовать только вместе с progress_bar
+    action_bar: "%percent%% %progress_bar%"
+    title: " "
+    subtitle: " "
+  complete:
+    action_bar: " "
+    title: " "
+    subtitle: "Вы снова можете ходить"
+
+progress_bar:
+  max_bars: 15
+  symbol: '|||'
+  border_left: '&8{'
+  border_right: '&8}'
+  color: f
+  complete_color: '7'
+  percent_color: 'e'
+
+# Множитель веса. Чем больше число, тем тяжелее предмет
+item_weight_multiplayer: 0.05
+
+jump_stamina_cost: 0.25
+# Стандарт - 0.2
+base_player_walk_speed: 0.18
+# В секундах
+base_fall_time: 3
+# Типы предметов, которые ничего не весят (Materials)
+exception_materials:
+  - ENCHANTED_BOOK
+  - PAPER
+  - WRITTEN_BOOK
+  - WRITABLE_BOOK
+  - MAP
+  - FILLED_MAP
+
+# Типы или названия предметов, которые игрок может переносить только в количестве одной штуки и только в левой руке
+heavy_items:
+  - JUNGLE_BOAT
+  - OAK_BOAT
+  - SPRUCE_BOAT
+  - ACACIA_BOAT
+  - DARK_OAK_BOAT
