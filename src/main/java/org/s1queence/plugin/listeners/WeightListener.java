@@ -34,15 +34,25 @@ public class WeightListener implements Listener {
         }
 
         ItemStack pickedItem = e.getItem().getItemStack();
+        ItemStack cloned = pickedItem.clone();
         if (plugin.isVeryHeavy(pickedItem)) {
             ItemStack offHandItem = player.getInventory().getItemInOffHand();
             if (!offHandItem.getType().equals(Material.AIR)) {
                 e.setCancelled(true);
                 return;
             }
+
+            if (pickedItem.getAmount() != 1) {
+                pickedItem.setAmount(pickedItem.getAmount() - 1);
+                e.getItem().setItemStack(pickedItem);
+            } else {
+                e.getItem().remove();
+            }
+
+            cloned.setAmount(1);
+
             e.setCancelled(true);
-            e.getItem().remove();
-            player.getInventory().setItem(40, pickedItem);
+            player.getInventory().setItem(40, cloned);
         }
 
         setSpeedByWeight(player, plugin);

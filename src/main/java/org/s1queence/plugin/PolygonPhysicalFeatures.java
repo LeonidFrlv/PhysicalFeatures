@@ -34,7 +34,7 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
     public static final List<Player> fallenPlayers = new ArrayList<>();
     public static final Map<String, Integer> playersTryingToAbuseFall = new HashMap<>();
     public static float WalkSpeed;
-    private List<String> exceptionMaterials;
+    private List<String> weightExceptions;
     private List<String> heavyItems;
     private YamlDocument config;
     private ProgressBar pb;
@@ -70,7 +70,7 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
         );
 
         WalkSpeed = config.getFloat("base_player_walk_speed");
-        exceptionMaterials = config.getStringList("exception_materials");
+        weightExceptions = config.getStringList("weight_exceptions");
         heavyItems = config.getStringList("heavy_items");
 
         fillRecipes(this);
@@ -82,8 +82,9 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
         if (!args[0].equalsIgnoreCase("reload")) return false;
 
         try {
-            File optionsCfgFile = new File(getDataFolder(), "config.yml");
-            if (!optionsCfgFile.exists()) config = YamlDocument.create(new File(getDataFolder(), "config.yml"), Objects.requireNonNull(getResource("config.yml")));
+            File configFile = new File(getDataFolder(), "config.yml");
+            if (!configFile.exists()) config = YamlDocument.create(new File(getDataFolder(), "config.yml"), Objects.requireNonNull(getResource("config.yml")));
+            if (config.hasDefaults()) Objects.requireNonNull(config.getDefaults()).clear();
             config.reload();
         } catch (IOException ignored) {
 
@@ -114,7 +115,7 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
             player.setWalkSpeed(WalkSpeed);
             setSpeedByWeight(player, this);
         }
-        exceptionMaterials = config.getStringList("exception_materials");
+        weightExceptions = config.getStringList("weight_exceptions");
         heavyItems = config.getStringList("heavy_items");
 
         String reloadMsg = getConvertedTextFromConfig(config, "onReload_msg", getName());
@@ -135,8 +136,8 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
         consoleLog(getConvertedTextFromConfig(config, "onDisable_msg", getName()), this);
     }
 
-    public List<String> getExceptionMaterials() {
-        return exceptionMaterials;
+    public List<String> getWeightExceptions() {
+        return weightExceptions;
     }
     public YamlDocument getPluginConfig() {
         return config;

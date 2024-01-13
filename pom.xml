@@ -6,7 +6,7 @@
 
     <groupId>org.s1queence.plugin</groupId>
     <artifactId>PolygonPhysicalFeatures</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>PolygonPhysicalFeatures</name>
@@ -85,7 +85,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <!--your outputDirectory-->
+                    <outputDirectory>C:\Users\Denis\Desktop\TestServer\plugins\</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

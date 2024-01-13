@@ -10,6 +10,8 @@ import org.s1queence.plugin.classes.FallProcess;
 import org.s1queence.plugin.libs.YamlDocument;
 
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
+import static org.s1queence.api.countdown.CountDownAction.getDoubleRunnableActionHandlers;
+import static org.s1queence.api.countdown.CountDownAction.getPreprocessActionHandlers;
 import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
 import static org.s1queence.plugin.PolygonPhysicalFeatures.jumpingPlayers;
 
@@ -23,6 +25,8 @@ public class PlayerFallHandler implements Listener {
         if (!e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
         Player player = (Player) e.getEntity();
         if (e.getFinalDamage() > 2.0d && player.getHealth() - e.getFinalDamage() > 0.0d) {
+            getPreprocessActionHandlers().remove(player);
+            getDoubleRunnableActionHandlers().remove(player);
             fallenPlayers.remove(player);
             jumpingPlayers.remove(player);
             YamlDocument cfg = plugin.getPluginConfig();

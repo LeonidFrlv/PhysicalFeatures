@@ -17,6 +17,3 @@ commands:
   getUpPlayer:
     usage: /getUpPlayer <player>
     permission: op
-  getMySpeed:
-    usage: /getMySpeed
-    permission: op

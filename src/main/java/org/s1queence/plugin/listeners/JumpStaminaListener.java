@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
+import static org.s1queence.api.countdown.CountDownAction.getDoubleRunnableActionHandlers;
+import static org.s1queence.api.countdown.CountDownAction.getPreprocessActionHandlers;
 import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
 import static org.s1queence.plugin.PolygonPhysicalFeatures.jumpingPlayers;
 
@@ -60,6 +62,8 @@ public class JumpStaminaListener implements Listener {
             if (player.getExp() <= 0.03f) {
                 YamlDocument cfg = plugin.getPluginConfig();
                 String pName = plugin.getName();
+                getPreprocessActionHandlers().remove(player);
+                getDoubleRunnableActionHandlers().remove(player);
 
                 new FallProcess(
                         player,

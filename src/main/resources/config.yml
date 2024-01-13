@@ -43,8 +43,8 @@ jump_stamina_cost: 0.25
 base_player_walk_speed: 0.18
 # В секундах
 base_fall_time: 3
-# Типы предметов, которые ничего не весят (Materials)
-exception_materials:
+# Типы или названия предметов, которые ничего не весят (у них приоритет выше чем у HEAVY_ITEMS)
+weight_exceptions:
   - ENCHANTED_BOOK
   - PAPER
   - WRITTEN_BOOK
@@ -59,3 +59,17 @@ heavy_items:
   - SPRUCE_BOAT
   - ACACIA_BOAT
   - DARK_OAK_BOAT
+  - IRON_DOOR
+  - JUNGLE_DOOR
+  - OAK_DOOR
+  - SPRUCE_DOOR
+  - ACACIA_DOOR
+  - DARK_OAK_DOOR
+  - CHEST_MINECART
+  - MINECART
+  - FURNACE_MINECART
+  - TNT_MINECART
+  - HOPPER_MINECART
+  - SMOKER
+  - BLAST_FURNACE
+  - FURNACE
