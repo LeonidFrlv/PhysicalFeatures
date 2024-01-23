@@ -36,7 +36,7 @@ progress_bar:
   percent_color: 'e'
 
 # Множитель веса. Чем больше число, тем тяжелее предмет
-item_weight_multiplayer: 0.05
+item_weight_multiplier: 0.05
 
 jump_stamina_cost: 0.25
 # Стандарт - 0.2

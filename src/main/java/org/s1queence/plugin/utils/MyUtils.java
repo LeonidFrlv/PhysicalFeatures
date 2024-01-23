@@ -93,7 +93,7 @@ public class MyUtils {
             if (isHeavy) maxStackPercent *= 2;
             if (maxStackSize == 1.0f && !isHeavy) maxStackPercent /= 5;
             if (maxStackSize == 16.0f && !isHeavy) maxStackPercent /= 3;
-            weightSpeedLimiter += maxStackPercent * plugin.getPluginConfig().getFloat("item_weight_multiplayer");
+            weightSpeedLimiter += maxStackPercent * plugin.getPluginConfig().getFloat("item_weight_multiplier");
         }
 
         player.setWalkSpeed(Math.max((PolygonPhysicalFeatures.WalkSpeed - weightSpeedLimiter), 0.0f));
