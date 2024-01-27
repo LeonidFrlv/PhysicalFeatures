@@ -26,6 +26,7 @@ public class FeaturesManager {
                 featuresOptionsConfig.getFloat("features.base_feature.item_weight_multiplier"),
                 featuresOptionsConfig.getFloat("features.base_feature.walk_speed"),
                 featuresOptionsConfig.getInt("features.base_feature.air_jump_cost"),
+                featuresOptionsConfig.getInt("features.base_feature.air_run_cost"),
                 featuresOptionsConfig.getInt("features.base_feature.max_air"),
                 featuresOptionsConfig.getInt("features.base_feature.fall_time")
         );
@@ -73,9 +74,10 @@ public class FeaturesManager {
             float item_weight_multiplier = values.getFloat("item_weight_multiplier");
             float walk_speed = values.getFloat("walk_speed");
             int air_jump_cost = values.getInt("air_jump_cost");
+            int air_run_cost = values.getInt("air_run_cost");
             int max_air = values.getInt("max_air");
             int fall_time = values.getInt("fall_time");
-            physicalFeaturesList.add(new PhysicalFeature(key, players, item_weight_multiplier, walk_speed, air_jump_cost, max_air, fall_time));
+            physicalFeaturesList.add(new PhysicalFeature(key, players, item_weight_multiplier, walk_speed, air_jump_cost, air_run_cost, max_air, fall_time));
         }
     }
 

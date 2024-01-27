@@ -13,8 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.IllegalPluginAccessException;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.s1queence.plugin.classes.FallProcess;
 import org.s1queence.plugin.classes.PhysicalFeature;
 import org.s1queence.plugin.libs.YamlDocument;
@@ -29,10 +31,47 @@ import static org.s1queence.api.countdown.CountDownAction.getPreprocessActionHan
 import static org.s1queence.plugin.PhysicalFeatures.fallenPlayers;
 import static org.s1queence.plugin.PhysicalFeatures.jumpingPlayers;
 
-public class JumpStaminaListener implements Listener {
+public class StaminaListener implements Listener {
     private final PhysicalFeatures plugin;
-    public JumpStaminaListener(PhysicalFeatures plugin) {this.plugin = plugin;}
+    public StaminaListener(PhysicalFeatures plugin) {this.plugin = plugin;}
     private final List<Player> playersInAirFromDamageKnockBack  = new ArrayList<>();
+
+    private final List<Player> runningPlayers = new ArrayList<>();
+    @EventHandler
+    private void onPlayerToggleRun(PlayerToggleSprintEvent e) {
+        Player player = e.getPlayer();
+        if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
+        if (player.isInWater()) return;
+        PhysicalFeature feature = plugin.getFm().getPlayerFeature(player);
+        int airRunCost = feature.getAirRunCost();
+        if (airRunCost == 0) return;
+        runningPlayers.add(player);
+        new BukkitRunnable() {
+            int ticks = 0;
+            @Override
+            public void run() {
+                if (player.isDead() || !player.isOnline() || !player.isSprinting() || player.isInWater() || !runningPlayers.contains(player)) {
+                    runningPlayers.remove(player);
+                    cancel();
+                    return;
+                }
+
+                if (ticks % 20 == 0) {
+                    int stamina = Math.max(player.getRemainingAir() - airRunCost, 0);
+                    player.setRemainingAir(stamina);
+                }
+
+                ticks++;
+
+                if (player.getRemainingAir() == 0) {
+                    setPlayerTired(player);
+                    cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0, 1);
+
+
+    }
 
     @EventHandler
     private void onPlayerMove(PlayerMoveEvent e) {
@@ -57,52 +96,20 @@ public class JumpStaminaListener implements Listener {
         if (player.getWalkSpeed() == 0.0f) player.teleport(e.getFrom());
 
         PhysicalFeature feature = plugin.getFm().getPlayerFeature(player);
-        int jumpStaminaCost = feature.getAirJumpCost();
-        int jStamina = player.getRemainingAir() - jumpStaminaCost;
-        int finalJStamina = Math.max(jStamina, 0);
+        int airJumpCost = feature.getAirJumpCost();
+        if (airJumpCost == 0) return;
+        int stamina = Math.max(player.getRemainingAir() - airJumpCost, 0);
         boolean isJumping = jumpingPlayers.contains(player);
         boolean isOnGround = ((Entity)player).isOnGround();
 
         if (from.getY() < to.getY() && !isOnGround && !isJumping) {
-            if (!playersInAirFromDamageKnockBack.contains(player)) player.setRemainingAir(finalJStamina);
+            if (!playersInAirFromDamageKnockBack.contains(player)) player.setRemainingAir(stamina);
             jumpingPlayers.add(player);
             return;
         }
 
         if (isJumping && isOnGround) {
-            if (player.getRemainingAir() == 0) {
-                YamlDocument cfg = plugin.getTextConfig();
-                int seconds = feature.getFallTime();
-                String pName = plugin.getName();
-                getPreprocessActionHandlers().remove(player);
-                getDoubleRunnableActionHandlers().remove(player);
-
-                new FallProcess(
-                        player,
-                        player,
-                        seconds,
-                        false,
-                        false,
-                        plugin.getProgressBar(),
-                        plugin,
-                        getConvertedTextFromConfig(cfg,"fall_process.every_tick.action_bar", pName),
-                        getConvertedTextFromConfig(cfg,"fall_process.every_tick.title", pName),
-                        getConvertedTextFromConfig(cfg,"fall_process.every_tick.subtitle", pName),
-                        null,
-                        null,
-                        getConvertedTextFromConfig(cfg,"fall_process.complete.action_bar", pName),
-                        getConvertedTextFromConfig(cfg,"fall_process.complete.title", pName),
-                        getConvertedTextFromConfig(cfg,"fall_process.complete.subtitle", pName),
-                        null,
-                        null,
-                        " ",
-                        " ",
-                        " ",
-                        null,
-                        null
-                );
-            }
-
+            if (player.getRemainingAir() == 0) setPlayerTired(player);
             jumpingPlayers.remove(player);
             playersInAirFromDamageKnockBack.remove(player);
         }
@@ -114,19 +121,57 @@ public class JumpStaminaListener implements Listener {
             Player player = e.getPlayer();
             Block block = player.getWorld().getBlockAt(player.getLocation().getBlockX(), player.getLocation().getBlockY() - 1, player.getLocation().getBlockZ());
             if (fallenPlayers.contains(player)) GSitAPI.createPose(block, player, Pose.SWIMMING);
+            if (player.isSprinting()) plugin.getServer().getPluginManager().callEvent(new PlayerToggleSprintEvent(player, true));
+
         } catch (IllegalPluginAccessException ignored) {
 
         }
     }
 
 
+
+    private void setPlayerTired(Player player) {
+        YamlDocument cfg = plugin.getTextConfig();
+        int seconds = plugin.getFm().getPlayerFeature(player).getFallTime();
+        String pName = plugin.getName();
+        getPreprocessActionHandlers().remove(player);
+        getDoubleRunnableActionHandlers().remove(player);
+        runningPlayers.remove(player);
+        jumpingPlayers.remove(player);
+
+        new FallProcess(
+                player,
+                player,
+                seconds,
+                false,
+                false,
+                plugin.getProgressBar(),
+                plugin,
+                getConvertedTextFromConfig(cfg,"fall_process.every_tick.action_bar", pName),
+                getConvertedTextFromConfig(cfg,"fall_process.every_tick.title", pName),
+                getConvertedTextFromConfig(cfg,"fall_process.every_tick.subtitle", pName),
+                null,
+                null,
+                getConvertedTextFromConfig(cfg,"fall_process.complete.action_bar", pName),
+                getConvertedTextFromConfig(cfg,"fall_process.complete.title", pName),
+                getConvertedTextFromConfig(cfg,"fall_process.complete.subtitle", pName),
+                null,
+                null,
+                " ",
+                " ",
+                " ",
+                null,
+                null
+        );
+    }
+
     @EventHandler
-    private void onEntityAirChangeEvent(EntityAirChangeEvent e) {
+    private void onEntityAirChange(EntityAirChangeEvent e) {
         Entity entity = e.getEntity();
         if (!(entity instanceof Player)) return;
         Player player = (Player) entity;
-        if (!jumpingPlayers.contains(player)) return;
-        e.setCancelled(true);
+        if (e.getAmount() < player.getRemainingAir()) return;
+        if (runningPlayers.contains(player) || jumpingPlayers.contains(player)) e.setCancelled(true);
     }
 
     @EventHandler
@@ -150,6 +195,15 @@ public class JumpStaminaListener implements Listener {
         Player player = e.getPlayer();
         jumpingPlayers.remove(player);
         playersInAirFromDamageKnockBack.remove(player);
+        runningPlayers.remove(player);
+    }
+
+    @EventHandler
+    private void onPlayerDeath(PlayerDeathEvent e) {
+        Player player = e.getEntity();
+        jumpingPlayers.remove(player);
+        playersInAirFromDamageKnockBack.remove(player);
+        runningPlayers.remove(player);
     }
 
 }

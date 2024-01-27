@@ -16,7 +16,7 @@ import org.s1queence.plugin.commands.PFCommand;
 import org.s1queence.plugin.commands.PhysicalStats;
 import org.s1queence.plugin.commands.SetPlayerFall;
 import org.s1queence.plugin.libs.YamlDocument;
-import org.s1queence.plugin.listeners.JumpStaminaListener;
+import org.s1queence.plugin.listeners.StaminaListener;
 import org.s1queence.plugin.listeners.PlayerSpawnListener;
 import org.s1queence.plugin.listeners.WeightListener;
 import org.s1queence.plugin.listeners.PlayerFallHandler;
@@ -75,7 +75,7 @@ public class PhysicalFeatures extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerFallHandler(this), this);
         getServer().getPluginManager().registerEvents(new PlayerSpawnListener(this), this);
-        getServer().getPluginManager().registerEvents(new JumpStaminaListener(this), this);
+        getServer().getPluginManager().registerEvents(new StaminaListener(this), this);
         getServer().getPluginManager().registerEvents(new WeightListener(this), this);
         Objects.requireNonNull(getServer().getPluginCommand("setPlayerFall")).setExecutor(new SetPlayerFall(this));
         Objects.requireNonNull(getServer().getPluginCommand("physicalFeatures")).setExecutor(new PFCommand(this));

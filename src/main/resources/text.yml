@@ -22,6 +22,7 @@ stats_command:
   current_air_prefix: "&3Текущее значение выносливости: "
   max_air_prefix: "&3Максимальное значение выносливости: "
   air_jump_cost_prefix: "&3Стоимость выносливости за прыжок: "
+  air_run_cost_prefix: "&3Стоимость выносливости за бег: "
   item_weight_multiplier_prefix: "&3Множитель веса предмета: "
   fall_time_prefix: "&3Стандартное время \"падения\" (сек): "
 

@@ -3,6 +3,7 @@
 # air_jump_cost - стоимость "воздуха" за один прыжок (только целые числа).
 # max_air - максимум воздуха (стандартный для minecraft - 300) (только целые числа).
 # fall_time - время, на которое игрок упадёт на землю, если устанет (в секундах).
+# air_run_cost - значение воздуха, которое будет отниматься за каждую секунду бега
 
 # base_feature - стандартная. КРАЙНЕ НЕ РЕКОМЕНДУЕТСЯ ЕЁ УДАЛЯТЬ. Она применяется если игрок не находится в списке players какой-либо из features ниже.
 
@@ -13,6 +14,7 @@ features:
     air_jump_cost: 75
     max_air: 300
     fall_time: 3
+    air_run_cost: 10
   example_feature:
     players:
       - example_player21321
@@ -22,3 +24,4 @@ features:
     air_jump_cost: 60
     max_air: 300
     fall_time: 3
+    air_run_cost: 15
