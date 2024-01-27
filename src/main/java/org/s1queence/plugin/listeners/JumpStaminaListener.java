@@ -16,8 +16,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.s1queence.plugin.classes.FallProcess;
+import org.s1queence.plugin.classes.PhysicalFeature;
 import org.s1queence.plugin.libs.YamlDocument;
-import org.s1queence.plugin.PolygonPhysicalFeatures;
+import org.s1queence.plugin.PhysicalFeatures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +26,26 @@ import java.util.List;
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 import static org.s1queence.api.countdown.CountDownAction.getDoubleRunnableActionHandlers;
 import static org.s1queence.api.countdown.CountDownAction.getPreprocessActionHandlers;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.jumpingPlayers;
+import static org.s1queence.plugin.PhysicalFeatures.fallenPlayers;
+import static org.s1queence.plugin.PhysicalFeatures.jumpingPlayers;
 
 public class JumpStaminaListener implements Listener {
-    private final PolygonPhysicalFeatures plugin;
-    public JumpStaminaListener(PolygonPhysicalFeatures plugin) {this.plugin = plugin;}
+    private final PhysicalFeatures plugin;
+    public JumpStaminaListener(PhysicalFeatures plugin) {this.plugin = plugin;}
+    private final List<Player> playersInAirFromDamageKnockBack  = new ArrayList<>();
 
     @EventHandler
     private void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
+
         if (player.isInWater()) {
             jumpingPlayers.remove(player);
             return;
         }
 
         if (player.isClimbing()) return;
+
         Location from = e.getFrom();
         Location to = e.getTo();
         if (to == null) return;
@@ -52,8 +56,8 @@ public class JumpStaminaListener implements Listener {
 
         if (player.getWalkSpeed() == 0.0f) player.teleport(e.getFrom());
 
-        int jumpStaminaCost = plugin.getPluginConfig().getInt("jump_stamina_cost") * 30;
-
+        PhysicalFeature feature = plugin.getFm().getPlayerFeature(player);
+        int jumpStaminaCost = feature.getAirJumpCost();
         int jStamina = player.getRemainingAir() - jumpStaminaCost;
         int finalJStamina = Math.max(jStamina, 0);
         boolean isJumping = jumpingPlayers.contains(player);
@@ -67,7 +71,8 @@ public class JumpStaminaListener implements Listener {
 
         if (isJumping && isOnGround) {
             if (player.getRemainingAir() == 0) {
-                YamlDocument cfg = plugin.getPluginConfig();
+                YamlDocument cfg = plugin.getTextConfig();
+                int seconds = feature.getFallTime();
                 String pName = plugin.getName();
                 getPreprocessActionHandlers().remove(player);
                 getDoubleRunnableActionHandlers().remove(player);
@@ -75,7 +80,7 @@ public class JumpStaminaListener implements Listener {
                 new FallProcess(
                         player,
                         player,
-                        cfg.getInt("base_fall_time"),
+                        seconds,
                         false,
                         false,
                         plugin.getProgressBar(),
@@ -114,7 +119,6 @@ public class JumpStaminaListener implements Listener {
         }
     }
 
-    private final List<Player> playersInAirFromDamageKnockBack  = new ArrayList<>();
 
     @EventHandler
     private void onEntityAirChangeEvent(EntityAirChangeEvent e) {
@@ -135,10 +139,9 @@ public class JumpStaminaListener implements Listener {
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent e) {
         Entity entity = e.getEntity();
+        if (entity.isInWater()) return;
         if (!(entity instanceof Player)) return;
-        Player player = (Player) entity;
         if (!e.getCause().equals(EntityDamageEvent.DamageCause.DROWNING)) return;
-        if (player.isInWater()) return;
         e.setCancelled(true);
     }
 

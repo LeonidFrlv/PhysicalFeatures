@@ -5,19 +5,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.s1queence.plugin.PolygonPhysicalFeatures;
+import org.s1queence.plugin.PhysicalFeatures;
 import org.s1queence.plugin.classes.FallProcess;
 import org.s1queence.plugin.libs.YamlDocument;
 
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 import static org.s1queence.api.countdown.CountDownAction.getDoubleRunnableActionHandlers;
 import static org.s1queence.api.countdown.CountDownAction.getPreprocessActionHandlers;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.jumpingPlayers;
+import static org.s1queence.plugin.PhysicalFeatures.fallenPlayers;
+import static org.s1queence.plugin.PhysicalFeatures.jumpingPlayers;
 
 public class PlayerFallHandler implements Listener {
-    private final PolygonPhysicalFeatures plugin;
-    public PlayerFallHandler(PolygonPhysicalFeatures plugin) {this.plugin = plugin;}
+    private final PhysicalFeatures plugin;
+    public PlayerFallHandler(PhysicalFeatures plugin) {this.plugin = plugin;}
 
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onEntityTakesDamage(EntityDamageEvent e) {
@@ -29,9 +29,9 @@ public class PlayerFallHandler implements Listener {
             getDoubleRunnableActionHandlers().remove(player);
             fallenPlayers.remove(player);
             jumpingPlayers.remove(player);
-            YamlDocument cfg = plugin.getPluginConfig();
+            YamlDocument cfg = plugin.getTextConfig();
             String pName = plugin.getName();
-            int seconds = (int)(e.getFinalDamage() / 1.5d + cfg.getInt("base_fall_time"));
+            int seconds = (int)(e.getFinalDamage() / 1.5d + plugin.getFm().getPlayerFeature(player).getFallTime());
 
             new FallProcess(
                     player,

@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.s1queence.plugin.classes.FallProcess;
 import org.s1queence.plugin.libs.YamlDocument;
-import org.s1queence.plugin.PolygonPhysicalFeatures;
+import org.s1queence.plugin.PhysicalFeatures;
 
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 import static org.s1queence.api.S1TextUtils.getTextWithInsertedPlayerName;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
+import static org.s1queence.plugin.PhysicalFeatures.fallenPlayers;
 
 public class SetPlayerFall implements CommandExecutor {
-    private final PolygonPhysicalFeatures plugin;
-    public SetPlayerFall(PolygonPhysicalFeatures plugin) {this.plugin = plugin;}
+    private final PhysicalFeatures plugin;
+    public SetPlayerFall(PhysicalFeatures plugin) {this.plugin = plugin;}
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
@@ -23,7 +23,7 @@ public class SetPlayerFall implements CommandExecutor {
 
         Player target = plugin.getServer().getPlayer(args[0]);
         if (target == null) {
-            sender.sendMessage(getConvertedTextFromConfig(plugin.getPluginConfig(), "player_not_found", plugin.getName()));
+            sender.sendMessage(getConvertedTextFromConfig(plugin.getTextConfig(), "player_not_found", plugin.getName()));
             return true;
         }
 
@@ -32,15 +32,15 @@ public class SetPlayerFall implements CommandExecutor {
         try {
             seconds = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(getConvertedTextFromConfig(plugin.getPluginConfig(), "seconds_value_is_nan", plugin.getName()));
+            sender.sendMessage(getConvertedTextFromConfig(plugin.getTextConfig(), "seconds_value_is_nan", plugin.getName()));
         }
 
         if (fallenPlayers.contains(target)) {
-            sender.sendMessage(getConvertedTextFromConfig(plugin.getPluginConfig(), "nothing_is_changed", plugin.getName()));
+            sender.sendMessage(getConvertedTextFromConfig(plugin.getTextConfig(), "nothing_is_changed", plugin.getName()));
             return true;
         }
 
-        YamlDocument cfg = plugin.getPluginConfig();
+        YamlDocument cfg = plugin.getTextConfig();
         String pName = plugin.getName();
 
         new FallProcess(
@@ -68,7 +68,7 @@ public class SetPlayerFall implements CommandExecutor {
                 null
         );
 
-        sender.sendMessage(getTextWithInsertedPlayerName(getConvertedTextFromConfig(plugin.getPluginConfig(), "player_fall_by_command", plugin.getName()), target.getName()));
+        sender.sendMessage(getTextWithInsertedPlayerName(getConvertedTextFromConfig(plugin.getTextConfig(), "player_fall_by_command", plugin.getName()), target.getName()));
         return true;
     }
 }

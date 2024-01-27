@@ -10,18 +10,16 @@ import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.s1queence.plugin.PolygonPhysicalFeatures;
+import org.s1queence.plugin.PhysicalFeatures;
 
 import static java.util.Optional.ofNullable;
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 import static org.s1queence.api.S1Utils.sendActionBarMsg;
-import static org.s1queence.plugin.utils.MyUtils.asyncSetSpeedByWeight;
-import static org.s1queence.plugin.utils.MyUtils.setSpeedByWeight;
 
 public class WeightListener implements Listener {
 
-    private final PolygonPhysicalFeatures plugin;
-    public WeightListener(PolygonPhysicalFeatures plugin) {this.plugin = plugin;}
+    private final PhysicalFeatures plugin;
+    public WeightListener(PhysicalFeatures plugin) {this.plugin = plugin;}
 
     @EventHandler
     private void onPlayerPickupItem(EntityPickupItemEvent e) {
@@ -55,32 +53,32 @@ public class WeightListener implements Listener {
             player.getInventory().setItem(40, cloned);
         }
 
-        setSpeedByWeight(player, plugin);
+        plugin.setSpeedByWeight(player);
     }
 
     @EventHandler
     private void onPlayerToggleSneak(PlayerToggleSneakEvent e) {
-        setSpeedByWeight(e.getPlayer(), plugin);
+        plugin.setSpeedByWeight(e.getPlayer());
     }
 
     @EventHandler
     private void onPlayerInteractWithInventory(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-        setSpeedByWeight(player, plugin);
+        plugin.setSpeedByWeight(player);
     }
 
     @EventHandler
     private void onPlayerChangeGameMode(PlayerGameModeChangeEvent e) {
         if (!e.getNewGameMode().equals(GameMode.SURVIVAL)) return;
-        asyncSetSpeedByWeight(e.getPlayer(), plugin);
+        plugin.asyncSetSpeedByWeight(e.getPlayer());
     }
 
     @EventHandler
     private void onPlayerDropItem(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-        setSpeedByWeight(player, plugin);
+        plugin.setSpeedByWeight(player);
     }
 
     @EventHandler
@@ -88,7 +86,7 @@ public class WeightListener implements Listener {
         if (!(e.getPlayer() instanceof Player)) return;
         Player player = (Player) e.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-        setSpeedByWeight(player, plugin);
+        plugin.setSpeedByWeight(player);
     }
 
     @EventHandler
@@ -96,7 +94,7 @@ public class WeightListener implements Listener {
         Player player = (Player) e.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
         if (!plugin.isVeryHeavy(player.getInventory().getItemInOffHand())) return;
-        sendActionBarMsg(player, getConvertedTextFromConfig(plugin.getPluginConfig(), "cant_open_inventory_with_heavy_item", plugin.getName()));
+        sendActionBarMsg(player, getConvertedTextFromConfig(plugin.getTextConfig(), "cant_open_inventory_with_heavy_item", plugin.getName()));
         e.setCancelled(true);
     }
 
@@ -111,14 +109,14 @@ public class WeightListener implements Listener {
     private void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-        setSpeedByWeight(player, plugin);
+        plugin.setSpeedByWeight(player);
     }
 
     @EventHandler
     private void onPlayerPlaceEntity(EntityPlaceEvent e) {
         Player player = e.getPlayer();
         if (player == null) return;
-        asyncSetSpeedByWeight(e.getPlayer(), plugin);
+        plugin.asyncSetSpeedByWeight(e.getPlayer());
     }
 
     @EventHandler

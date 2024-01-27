@@ -1,0 +1,31 @@
+# Типы или названия предметов, которые ничего не весят (у них приоритет выше чем у HEAVY_ITEMS)
+weight_exceptions:
+  - ENCHANTED_BOOK
+  - PAPER
+  - WRITTEN_BOOK
+  - WRITABLE_BOOK
+  - MAP
+  - FILLED_MAP
+
+# Типы или названия предметов, которые игрок может переносить только в количестве одной штуки и только в левой руке
+# При крафте этого предмета (если его можно скрафтить) его можно только поштучно выкидывать на землю
+heavy_items:
+  - JUNGLE_BOAT
+  - OAK_BOAT
+  - SPRUCE_BOAT
+  - ACACIA_BOAT
+  - DARK_OAK_BOAT
+  - IRON_DOOR
+  - JUNGLE_DOOR
+  - OAK_DOOR
+  - SPRUCE_DOOR
+  - ACACIA_DOOR
+  - DARK_OAK_DOOR
+  - CHEST_MINECART
+  - MINECART
+  - FURNACE_MINECART
+  - TNT_MINECART
+  - HOPPER_MINECART
+  - SMOKER
+  - BLAST_FURNACE
+  - FURNACE

@@ -9,22 +9,30 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.s1queence.plugin.classes.FallProcess;
 import org.s1queence.plugin.libs.YamlDocument;
-import org.s1queence.plugin.PolygonPhysicalFeatures;
+import org.s1queence.plugin.PhysicalFeatures;
 
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.*;
-import static org.s1queence.plugin.utils.MyUtils.*;
+import static org.s1queence.plugin.PhysicalFeatures.*;
 
 public class PlayerSpawnListener implements Listener {
-    private final PolygonPhysicalFeatures plugin;
-    public PlayerSpawnListener(PolygonPhysicalFeatures plugin) {this.plugin = plugin;}
+    private final PhysicalFeatures plugin;
+    public PlayerSpawnListener(PhysicalFeatures plugin) {this.plugin = plugin;}
 
     @EventHandler
-    private void onJoin(PlayerJoinEvent e) {
+    private void onPlayerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         String uuid = player.getUniqueId().toString();
+
+        if (!player.getGameMode().equals(GameMode.SURVIVAL)) {
+            player.setWalkSpeed(0.2f);
+            playersTryingToAbuseFall.remove(uuid);
+            return;
+        }
+
+        plugin.getFm().setPlayerFeature(player);
+
         if (playersTryingToAbuseFall.containsKey(uuid)) {
-            YamlDocument cfg = plugin.getPluginConfig();
+            YamlDocument cfg = plugin.getTextConfig();
             String pName = plugin.getName();
 
             new FallProcess(
@@ -54,31 +62,30 @@ public class PlayerSpawnListener implements Listener {
 
             playersTryingToAbuseFall.remove(uuid);
         }
-        if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-        setDefaultPlayerStats(player);
     }
 
     @EventHandler
     private void onRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
-        jumpingPlayers.remove(e.getPlayer());
-        if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-        setDefaultPlayerStats(player);
+        jumpingPlayers.remove(player);
+
+        if (!player.getGameMode().equals(GameMode.SURVIVAL)) {
+            player.setWalkSpeed(0.2f);
+            return;
+        }
+
+        plugin.getFm().setPlayerFeature(player);
     }
 
     @EventHandler
     private void onGameModeChange(PlayerGameModeChangeEvent e) {
         Player player = e.getPlayer();
+
         if (!e.getNewGameMode().equals(GameMode.SURVIVAL)) {
             player.setWalkSpeed(0.2f);
             return;
         }
-        setDefaultPlayerStats(player);
-    }
 
-    private void setDefaultPlayerStats(Player player) {
-        player.setExp(1.0f);
-        player.setWalkSpeed(WalkSpeed);
-        setSpeedByWeight(player, plugin);
+        plugin.getFm().setPlayerFeature(player);
     }
 }

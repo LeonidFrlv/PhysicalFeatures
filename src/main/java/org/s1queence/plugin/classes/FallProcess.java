@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.s1queence.api.countdown.CountDownAction;
 import org.s1queence.api.countdown.progressbar.ProgressBar;
-import org.s1queence.plugin.PolygonPhysicalFeatures;
+import org.s1queence.plugin.PhysicalFeatures;
 
-import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
+import static org.s1queence.plugin.PhysicalFeatures.fallenPlayers;
 
 public class FallProcess extends CountDownAction {
     public FallProcess(
@@ -23,7 +23,7 @@ public class FallProcess extends CountDownAction {
             boolean isDoubleRunnableAction,
             boolean isClosePlayersInventoriesEveryTick,
             @NotNull ProgressBar pb,
-            @NotNull PolygonPhysicalFeatures plugin,
+            @NotNull PhysicalFeatures plugin,
             @NotNull String everyTickBothActionBarMsg,
             @NotNull String everyTickPlayerTitle,
             @NotNull String everyTickPlayerSubtitle,
@@ -55,7 +55,7 @@ public class FallProcess extends CountDownAction {
             @Override
             public void run() {
                 if (!player.isOnline()) {
-                    PolygonPhysicalFeatures.playersTryingToAbuseFall.put(player.getUniqueId().toString(), getTicksLeft() / 20);
+                    PhysicalFeatures.playersTryingToAbuseFall.put(player.getUniqueId().toString(), getTicksLeft() / 20);
                     fallenPlayers.remove(player);
                     cancelAction(false);
                     cancel();

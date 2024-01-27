@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.s1queence.plugin</groupId>
-    <artifactId>PolygonPhysicalFeatures</artifactId>
-    <version>1.2</version>
+    <artifactId>PhysicalFeatures</artifactId>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
-    <name>PolygonPhysicalFeatures</name>
+    <name>PhysicalFeatures</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -85,7 +85,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputDirectory>C:\Users\Denis\Desktop\TestServer\plugins\</outputDirectory>
+                    <!--your outputDirectory-->
                 </configuration>
             </plugin>
         </plugins>

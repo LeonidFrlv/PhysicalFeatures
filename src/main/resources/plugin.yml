@@ -1,19 +1,24 @@
-name: PolygonPhysicalFeatures
+name: PhysicalFeatures
 version: '${project.version}'
 api-version: '1.18'
-main: org.s1queence.plugin.PolygonPhysicalFeatures
+main: org.s1queence.plugin.PhysicalFeatures
 depend:
   - S1queenceLib
   - GSit
 commands:
-  polygonPhysicalFeatures:
-    usage: /ppf reload
-    permission: ppf.perms.reload
+  physicalFeatures:
+    usage: /pf reload
+    permission: pf.perms.reload
     aliases:
-      - ppf
+      - pf
   setPlayerFall:
     usage: /setPlayerFall <player> <seconds>
-    permission: op
+    permission: pf.perms.spf
   getUpPlayer:
     usage: /getUpPlayer <player>
-    permission: op
+    permission: pf.perms.gup
+  physicalStats:
+    usage: /physicalStats <player>
+    permission: pf.perms.ps
+    aliases:
+      - ps
