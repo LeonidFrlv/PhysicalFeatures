@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.s1queence.plugin.classes.FallProcess;
@@ -34,8 +36,12 @@ public class JumpStaminaListener implements Listener {
     private void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
+        if (player.isInWater()) {
+            jumpingPlayers.remove(player);
+            return;
+        }
+
         if (player.isClimbing()) return;
-        if (player.isInWater()) return;
         Location from = e.getFrom();
         Location to = e.getTo();
         if (to == null) return;
@@ -46,20 +52,21 @@ public class JumpStaminaListener implements Listener {
 
         if (player.getWalkSpeed() == 0.0f) player.teleport(e.getFrom());
 
-        float jumpStaminaCost = plugin.getPluginConfig().getFloat("jump_stamina_cost");
-        float jStamina = player.getExp() - jumpStaminaCost;
-        float finalJStamina = Math.max(jStamina, 0.0f);
+        int jumpStaminaCost = plugin.getPluginConfig().getInt("jump_stamina_cost") * 30;
+
+        int jStamina = player.getRemainingAir() - jumpStaminaCost;
+        int finalJStamina = Math.max(jStamina, 0);
         boolean isJumping = jumpingPlayers.contains(player);
         boolean isOnGround = ((Entity)player).isOnGround();
 
         if (from.getY() < to.getY() && !isOnGround && !isJumping) {
-            if (!playersInAirFromDamageKnockBack.contains(player)) player.setExp(finalJStamina);
+            if (!playersInAirFromDamageKnockBack.contains(player)) player.setRemainingAir(finalJStamina);
             jumpingPlayers.add(player);
             return;
         }
 
         if (isJumping && isOnGround) {
-            if (player.getExp() <= 0.03f) {
+            if (player.getRemainingAir() == 0) {
                 YamlDocument cfg = plugin.getPluginConfig();
                 String pName = plugin.getName();
                 getPreprocessActionHandlers().remove(player);
@@ -110,10 +117,29 @@ public class JumpStaminaListener implements Listener {
     private final List<Player> playersInAirFromDamageKnockBack  = new ArrayList<>();
 
     @EventHandler
+    private void onEntityAirChangeEvent(EntityAirChangeEvent e) {
+        Entity entity = e.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player player = (Player) entity;
+        if (!jumpingPlayers.contains(player)) return;
+        e.setCancelled(true);
+    }
+
+    @EventHandler
     private void onPlayerTakesDamageFromEntity(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
         if (!playersInAirFromDamageKnockBack.contains(player)) playersInAirFromDamageKnockBack.add(player);
+    }
+
+    @EventHandler
+    private void onPlayerDamage(EntityDamageEvent e) {
+        Entity entity = e.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player player = (Player) entity;
+        if (!e.getCause().equals(EntityDamageEvent.DamageCause.DROWNING)) return;
+        if (player.isInWater()) return;
+        e.setCancelled(true);
     }
 
     @EventHandler

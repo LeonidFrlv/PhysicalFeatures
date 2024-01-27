@@ -13,48 +13,8 @@ import java.util.List;
 import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 import static org.s1queence.api.S1TextUtils.removeAllChatColorCodesFromString;
 import static org.s1queence.api.S1Utils.sendActionBarMsg;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.fallenPlayers;
-import static org.s1queence.plugin.PolygonPhysicalFeatures.jumpingPlayers;
 
 public class MyUtils {
-    public static void startStaminaIncrease(Player player, PolygonPhysicalFeatures plugin) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                float stamina = player.getExp();
-                if (!player.isOnline() || player.isDead() || !player.getGameMode().equals(GameMode.SURVIVAL)) {
-                    cancel();
-                    return;
-                }
-
-                if (stamina < 1.0f && !jumpingPlayers.contains(player) && !fallenPlayers.contains(player)) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            float incrementor = 0.0021f;
-                            float stamina = player.getExp();
-
-                            if (jumpingPlayers.contains(player)) {
-                                cancel();
-                                return;
-                            }
-
-                            stamina += incrementor;
-
-                            if (stamina >= 1.0f) {
-                                player.setExp(1.0f);
-                                cancel();
-                                return;
-                            }
-
-                            player.setExp(stamina);
-                        }
-                    }.runTaskTimer(plugin, 0, 1);
-                }
-            }
-        }.runTaskTimer(plugin, 0, 1);
-    }
-
     private static boolean isWeightException(ItemStack item, List<String> exceptions) {
         if (exceptions.contains(item.getType().toString())) return true;
         ItemMeta im = item.getItemMeta();

@@ -16,7 +16,6 @@ import org.s1queence.plugin.commands.SetPlayerFall;
 import org.s1queence.plugin.libs.YamlDocument;
 import org.s1queence.plugin.listeners.JumpStaminaListener;
 import org.s1queence.plugin.listeners.PlayerSpawnListener;
-import org.s1queence.plugin.listeners.RemoveExp;
 import org.s1queence.plugin.listeners.WeightListener;
 import org.s1queence.plugin.listeners.PlayerFallHandler;
 
@@ -24,9 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static org.bukkit.Bukkit.spigot;
 import static org.s1queence.api.S1TextUtils.*;
-import static org.s1queence.plugin.listeners.RemoveExp.fillRecipes;
 import static org.s1queence.plugin.utils.MyUtils.setSpeedByWeight;
 
 public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecutor {
@@ -49,7 +46,6 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
         getServer().getPluginManager().registerEvents(new PlayerFallHandler(this), this);
         getServer().getPluginManager().registerEvents(new PlayerSpawnListener(this), this);
         getServer().getPluginManager().registerEvents(new JumpStaminaListener(this), this);
-        getServer().getPluginManager().registerEvents(new RemoveExp(), this);
         getServer().getPluginManager().registerEvents(new WeightListener(this), this);
 
         Objects.requireNonNull(getServer().getPluginCommand("setPlayerFall")).setExecutor(new SetPlayerFall(this));
@@ -73,7 +69,6 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
         weightExceptions = config.getStringList("weight_exceptions");
         heavyItems = config.getStringList("heavy_items");
 
-        fillRecipes(this);
     }
 
     @Override
@@ -88,13 +83,6 @@ public class PolygonPhysicalFeatures extends JavaPlugin implements CommandExecut
             config.reload();
         } catch (IOException ignored) {
 
-        }
-
-        if (!spigot().getConfig().getStringList("advancements.disabled").contains("*")) {
-            fillRecipes(this);
-            for (Player player : getServer().getOnlinePlayers()) {
-                player.discoverRecipes(RemoveExp.recipes);
-            }
         }
 
         pb = new ProgressBar(

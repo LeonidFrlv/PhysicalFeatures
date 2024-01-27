@@ -80,6 +80,5 @@ public class PlayerSpawnListener implements Listener {
         player.setExp(1.0f);
         player.setWalkSpeed(WalkSpeed);
         setSpeedByWeight(player, plugin);
-        startStaminaIncrease(player, plugin);
     }
 }
