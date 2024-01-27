@@ -71,6 +71,8 @@ public class PhysicalFeatures extends JavaPlugin {
         weightExceptions = itemsWeightOptionsConfig.getStringList("weight_exceptions");
         heavyItems = itemsWeightOptionsConfig.getStringList("heavy_items");
 
+        saveResource("readme.txt", true);
+
         getServer().getPluginManager().registerEvents(new PlayerFallHandler(this), this);
         getServer().getPluginManager().registerEvents(new PlayerSpawnListener(this), this);
         getServer().getPluginManager().registerEvents(new JumpStaminaListener(this), this);

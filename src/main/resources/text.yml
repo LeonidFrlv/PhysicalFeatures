@@ -1,6 +1,3 @@
-# reload permission - pf.perms.reload
-# physicalStats command permission - pf.perms.ps - команда, позволяющая просматривать текущие характеристики игрока
-
 # %plugin% - название плагина
 # %username% - ник игрока
 

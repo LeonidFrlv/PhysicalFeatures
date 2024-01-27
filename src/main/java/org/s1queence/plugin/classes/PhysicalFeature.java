@@ -1,5 +1,6 @@
 package org.s1queence.plugin.classes;
 
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class PhysicalFeature {
 
     @Override
     public String toString() {
-        return name + " {" + "players: " + playerNames + "; " + "itemWeightMultiplier: " + itemWeightMultiplier + "; " + "walkSpeed: " + walkSpeed + "; " + "airJumpCost: " + airJumpCost + "; " + "maxAir: " + maxAir + "; " + "fallTime: " + fallTime + ";}";
+        return ChatColor.RED + name + ChatColor.WHITE + " : {" + "players: " + playerNames + "; " + "itemWeightMultiplier: " + itemWeightMultiplier + "; " + "walkSpeed: " + walkSpeed + "; " + "airJumpCost: " + airJumpCost + "; " + "maxAir: " + maxAir + "; " + "fallTime: " + fallTime + ";}";
     }
 
     public boolean equals(PhysicalFeature pf) {

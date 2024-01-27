@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class FeaturesManager {
     private final List<PhysicalFeature> physicalFeaturesList = new ArrayList<>();
-
     private final PhysicalFeatures plugin;
     private final PhysicalFeature baseFeature;
 
@@ -80,4 +79,7 @@ public class FeaturesManager {
         }
     }
 
+    public List<PhysicalFeature> getPhysicalFeaturesList() {
+        return physicalFeaturesList;
+    }
 }

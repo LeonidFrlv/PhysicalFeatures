@@ -7,16 +7,20 @@ depend:
   - GSit
 commands:
   physicalFeatures:
-    usage: /pf reload
-    permission: pf.perms.reload
+    usage: /pf <get, reload>
+    permission: pf.perms.pf
     aliases:
       - pf
   setPlayerFall:
     usage: /setPlayerFall <player> <seconds>
     permission: pf.perms.spf
+    aliases:
+      - spf
   getUpPlayer:
     usage: /getUpPlayer <player>
     permission: pf.perms.gup
+    aliases:
+      - gup
   physicalStats:
     usage: /physicalStats <player>
     permission: pf.perms.ps
