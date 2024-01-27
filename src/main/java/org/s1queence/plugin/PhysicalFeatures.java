@@ -127,8 +127,7 @@ public class PhysicalFeatures extends JavaPlugin {
             }
 
             float maxStackSize = (float) item.getMaxStackSize();
-            float maxStackPercent = item.getAmount() / maxStackSize;
-            if (isHeavy) maxStackPercent *= 2;
+            float maxStackPercent = !isHeavy ? item.getAmount() / maxStackSize : 2;
             if (maxStackSize == 1.0f && !isHeavy) maxStackPercent /= 5;
             if (maxStackSize == 16.0f && !isHeavy) maxStackPercent /= 3;
             weightSpeedLimiter += maxStackPercent * feature.getItemWeightMultiplier();
