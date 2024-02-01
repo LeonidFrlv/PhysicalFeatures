@@ -65,8 +65,6 @@ public class PFCommand implements CommandExecutor {
 
             YamlDocument textConfig = plugin.getTextConfig();
 
-            plugin.setFm(new FeaturesManager(plugin));
-
             plugin.setProgressBar(new ProgressBar(
                     0,
                     1,
@@ -84,10 +82,11 @@ public class PFCommand implements CommandExecutor {
             plugin.setWeightExceptions(itemsWeightOptionsConfig.getStringList("weight_exceptions"));
             plugin.setHeavyItems(itemsWeightOptionsConfig.getStringList("heavy_items"));
 
+            plugin.setFm(new FeaturesManager(plugin));
+
             String reloadMsg = getConvertedTextFromConfig(textConfig, "onReload_msg", plugin.getName());
             if (sender instanceof Player) sender.sendMessage(reloadMsg);
             consoleLog(reloadMsg, plugin);
-
         }
 
         return true;

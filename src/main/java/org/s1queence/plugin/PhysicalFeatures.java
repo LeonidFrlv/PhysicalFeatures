@@ -38,9 +38,7 @@ public class PhysicalFeatures extends JavaPlugin {
     private YamlDocument featuresOptionsConfig;
     private YamlDocument textConfig;
     private ProgressBar pb;
-
     private FeaturesManager fm;
-
     public void onEnable() {
         try {
             File textConfigFile = new File(getDataFolder(), "text.yml");

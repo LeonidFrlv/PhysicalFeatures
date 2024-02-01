@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.s1queence.plugin.classes.FallProcess;
@@ -63,7 +64,7 @@ public class StaminaListener implements Listener {
 
                 ticks++;
 
-                if (player.getRemainingAir() == 0) {
+                if (player.getRemainingAir() == 0 && ((Entity)player).isOnGround()) {
                     setPlayerTired(player);
                     cancel();
                 }
@@ -127,8 +128,6 @@ public class StaminaListener implements Listener {
 
         }
     }
-
-
 
     private void setPlayerTired(Player player) {
         YamlDocument cfg = plugin.getTextConfig();
@@ -201,6 +200,16 @@ public class StaminaListener implements Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
+        jumpingPlayers.remove(player);
+        playersInAirFromDamageKnockBack.remove(player);
+        runningPlayers.remove(player);
+    }
+
+    @EventHandler
+    private void onPlayerVehicleEnter(VehicleEnterEvent e) {
+        Entity entity = e.getEntered();
+        if (!(entity instanceof Player)) return;
+        Player player = (Player) entity;
         jumpingPlayers.remove(player);
         playersInAirFromDamageKnockBack.remove(player);
         runningPlayers.remove(player);

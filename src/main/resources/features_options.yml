@@ -1,7 +1,6 @@
 # players - список игроков (ники) которые будут иметь эти свойства
 # item_weight_multiplier - множитель веса. Чем больше число, тем тяжелее предмет (только дробные числа)
 # air_jump_cost - стоимость "воздуха" за один прыжок (только целые числа).
-# max_air - максимум воздуха (стандартный для minecraft - 300) (только целые числа).
 # fall_time - время, на которое игрок упадёт на землю, если устанет (в секундах).
 # air_run_cost - значение воздуха, которое будет отниматься за каждую секунду бега
 
@@ -12,7 +11,6 @@ features:
     item_weight_multiplier: 0.05
     walk_speed: 0.18
     air_jump_cost: 75
-    max_air: 300
     fall_time: 3
     air_run_cost: 10
   example_feature:
@@ -22,6 +20,5 @@ features:
     item_weight_multiplier: 0.05
     walk_speed: 0.18
     air_jump_cost: 60
-    max_air: 300
     fall_time: 3
     air_run_cost: 15

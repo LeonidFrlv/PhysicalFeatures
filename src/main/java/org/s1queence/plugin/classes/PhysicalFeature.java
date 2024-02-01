@@ -12,23 +12,21 @@ public class PhysicalFeature {
     private final float walkSpeed;
     private final int airJumpCost;
     private final int airRunCost;
-    private final int maxAir;
     private final int fallTime;
 
-    public PhysicalFeature(String name, @NotNull List<String> playerNames, float itemWeightMultiplier, float walkSpeed, int airJumpCost, int airRunCost, int maxAir, int fallTime) {
+    public PhysicalFeature(String name, @NotNull List<String> playerNames, float itemWeightMultiplier, float walkSpeed, int airJumpCost, int airRunCost, int fallTime) {
         this.name = name;
         this.playerNames = playerNames;
         this.itemWeightMultiplier = itemWeightMultiplier;
         this.walkSpeed = walkSpeed;
         this.airJumpCost = airJumpCost;
         this.airRunCost = airRunCost;
-        this.maxAir = maxAir;
         this.fallTime = fallTime;
     }
 
     @Override
     public String toString() {
-        return ChatColor.RED + name + ChatColor.WHITE + " : {" + "players: " + playerNames + "; " + "itemWeightMultiplier: " + itemWeightMultiplier + "; " + "walkSpeed: " + walkSpeed + "; " + "airJumpCost: " + airJumpCost + "; " + "airRunCost: " + airRunCost + "; " + "maxAir: " + maxAir + "; " + "fallTime: " + fallTime + ";}";
+        return ChatColor.RED + name + ChatColor.WHITE + " : {" + "players: " + playerNames + "; " + "itemWeightMultiplier: " + itemWeightMultiplier + "; " + "walkSpeed: " + walkSpeed + "; " + "airJumpCost: " + airJumpCost + "; " + "airRunCost: " + airRunCost + "; " + "fallTime: " + fallTime + ";}";
     }
 
     public boolean equals(PhysicalFeature pf) {
@@ -63,7 +61,4 @@ public class PhysicalFeature {
         return fallTime;
     }
 
-    public int getMaxAir() {
-        return maxAir;
-    }
 }

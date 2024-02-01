@@ -43,7 +43,7 @@ public class PhysicalStats implements CommandExecutor {
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.current_speed_prefix", pName) + ChatColor.WHITE + target.getWalkSpeed());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.max_speed_prefix", pName) + ChatColor.WHITE + feature.getWalkSpeed());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.current_air_prefix", pName) + ChatColor.WHITE + target.getRemainingAir());
-        sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.max_air_prefix", pName) + ChatColor.WHITE + feature.getMaxAir());
+        sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.max_air_prefix", pName) + ChatColor.WHITE + target.getMaximumAir());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.air_jump_cost_prefix", pName) + ChatColor.WHITE + feature.getAirJumpCost());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.air_run_cost_prefix", pName) + ChatColor.WHITE + feature.getAirRunCost());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.item_weight_multiplier_prefix", pName) + ChatColor.WHITE + feature.getItemWeightMultiplier());
