@@ -6,7 +6,7 @@
 
     <groupId>org.s1queence.plugin</groupId>
     <artifactId>PhysicalFeatures</artifactId>
-    <version>1.3.4</version>
+    <version>1.3.5</version>
     <packaging>jar</packaging>
 
     <name>PhysicalFeatures</name>

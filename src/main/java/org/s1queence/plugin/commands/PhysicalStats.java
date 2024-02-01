@@ -2,6 +2,8 @@ package org.s1queence.plugin.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,6 +49,10 @@ public class PhysicalStats implements CommandExecutor {
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.air_jump_cost_prefix", pName) + ChatColor.WHITE + feature.getAirJumpCost());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.air_run_cost_prefix", pName) + ChatColor.WHITE + feature.getAirRunCost());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.item_weight_multiplier_prefix", pName) + ChatColor.WHITE + feature.getItemWeightMultiplier());
+        sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.max_health_prefix", pName) + ChatColor.WHITE + feature.getMaxHealth());
+        sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.damage_bonus_prefix", pName) + ChatColor.WHITE + feature.getDamageBonus());
+        AttributeInstance damageAttr = target.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (damageAttr != null) sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.current_damage_prefix", pName) + ChatColor.WHITE + damageAttr.getBaseValue());
         sender.sendMessage(getConvertedTextFromConfig(cfg, "stats_command.fall_time_prefix", pName) + ChatColor.WHITE + feature.getFallTime());
         return true;
     }

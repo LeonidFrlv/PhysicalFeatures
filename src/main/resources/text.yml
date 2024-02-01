@@ -24,6 +24,9 @@ stats_command:
   air_jump_cost_prefix: "&3Стоимость выносливости за прыжок: "
   air_run_cost_prefix: "&3Стоимость выносливости за бег: "
   item_weight_multiplier_prefix: "&3Множитель веса предмета: "
+  max_health_prefix: "&3Максимальное здоровье: "
+  damage_bonus_prefix: "&3Бонус урона: "
+  current_damage_prefix: "&3Текущий урон: "
   fall_time_prefix: "&3Стандартное время \"падения\" (сек): "
 
 # Оставить пробел, если хочешь убрать отображение конкретного сообщения (иначе не будет работать).

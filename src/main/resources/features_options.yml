@@ -3,6 +3,8 @@
 # air_jump_cost - стоимость "воздуха" за один прыжок (только целые числа).
 # fall_time - время, на которое игрок упадёт на землю, если устанет (в секундах).
 # air_run_cost - значение воздуха, которое будет отниматься за каждую секунду бега
+# max_health - максимальное количество хп игрока
+# damage_bonus - на это значение увеличивается урон игрока
 
 # base_feature - стандартная. КРАЙНЕ НЕ РЕКОМЕНДУЕТСЯ ЕЁ УДАЛЯТЬ. Она применяется если игрок не находится в списке players какой-либо из features ниже.
 
@@ -13,6 +15,8 @@ features:
     air_jump_cost: 75
     fall_time: 3
     air_run_cost: 10
+    max_health: 20.0
+    damage_bonus: 0.0
   example_feature:
     players:
       - example_player21321
@@ -22,3 +26,5 @@ features:
     air_jump_cost: 60
     fall_time: 3
     air_run_cost: 15
+    max_health: 20.0
+    damage_bonus: 0.0

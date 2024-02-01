@@ -1,6 +1,8 @@
 package org.s1queence.plugin.classes;
 
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.s1queence.plugin.PhysicalFeatures;
 import org.s1queence.plugin.libs.YamlDocument;
@@ -27,7 +29,9 @@ public class FeaturesManager {
                 featuresOptionsConfig.getFloat("features.base_feature.walk_speed"),
                 featuresOptionsConfig.getInt("features.base_feature.air_jump_cost"),
                 featuresOptionsConfig.getInt("features.base_feature.air_run_cost"),
-                featuresOptionsConfig.getInt("features.base_feature.fall_time")
+                featuresOptionsConfig.getInt("features.base_feature.fall_time"),
+                featuresOptionsConfig.getDouble("features.base_feature.max_health"),
+                featuresOptionsConfig.getDouble("features.base_feature.damage_bonus")
         );
 
         fillFeatures();
@@ -47,10 +51,21 @@ public class FeaturesManager {
     }
 
     public void setPlayerFeature(Player player) {
-        if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
         PhysicalFeature feature = getPlayerFeature(player);
+        if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
         String playerName = player.getName();
         if (feature.equals(baseFeature) && !baseFeature.getPlayerNames().contains(playerName)) baseFeature.getPlayerNames().add(playerName);
+
+        AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (maxHealthAttr != null) {
+            double featureMaxHealth = feature.getMaxHealth();
+            maxHealthAttr.setBaseValue(featureMaxHealth);
+            player.setHealth(featureMaxHealth);
+        }
+
+        AttributeInstance attackDamageAttr = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (attackDamageAttr != null) attackDamageAttr.setBaseValue(1.0d + feature.getDamageBonus());
+
         plugin.asyncSetSpeedByWeight(player);
     }
 
@@ -72,7 +87,9 @@ public class FeaturesManager {
             int air_jump_cost = values.getInt("air_jump_cost");
             int air_run_cost = values.getInt("air_run_cost");
             int fall_time = values.getInt("fall_time");
-            physicalFeaturesList.add(new PhysicalFeature(key, players, item_weight_multiplier, walk_speed, air_jump_cost, air_run_cost, fall_time));
+            double max_health = values.getDouble("max_health");
+            double damage_bonus = values.getDouble("damage_bonus");
+            physicalFeaturesList.add(new PhysicalFeature(key, players, item_weight_multiplier, walk_speed, air_jump_cost, air_run_cost, fall_time, max_health, damage_bonus));
         }
     }
 
