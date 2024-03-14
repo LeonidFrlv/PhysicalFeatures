@@ -2,6 +2,7 @@ package org.s1queence.plugin;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -129,6 +130,13 @@ public class PhysicalFeatures extends JavaPlugin {
             if (maxStackSize == 1.0f && !isHeavy) maxStackPercent /= 5;
             if (maxStackSize == 16.0f && !isHeavy) maxStackPercent /= 3;
             weightSpeedLimiter += maxStackPercent * feature.getItemWeightMultiplier();
+        }
+
+        List<Entity> passengers = player.getPassengers();
+        if (!passengers.isEmpty()) {
+            for (Entity ignored : passengers) {
+                weightSpeedLimiter += 2 * feature.getItemWeightMultiplier();
+            }
         }
 
         player.setWalkSpeed(Math.max((feature.getWalkSpeed() - weightSpeedLimiter), 0.0f));
