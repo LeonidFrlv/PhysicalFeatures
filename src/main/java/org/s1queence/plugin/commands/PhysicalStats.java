@@ -22,8 +22,10 @@ public class PhysicalStats implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if (args.length != 1) return false;
-        Player target = plugin.getServer().getPlayer(args[0]);
+        if (args.length > 1) return false;
+        boolean argsIsEmpty = args.length == 0;
+        if (!(sender instanceof Player) && argsIsEmpty) return false;
+        Player target = argsIsEmpty ? (Player) sender : plugin.getServer().getPlayer(args[0]);
         String pName = plugin.getName();
         YamlDocument cfg = plugin.getTextConfig();
 
