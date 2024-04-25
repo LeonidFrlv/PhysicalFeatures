@@ -60,7 +60,7 @@ public class FeaturesManager {
         if (maxHealthAttr != null) {
             double featureMaxHealth = feature.getMaxHealth();
             maxHealthAttr.setBaseValue(featureMaxHealth);
-            player.setHealth(featureMaxHealth);
+            if (player.getHealth() > featureMaxHealth) player.setHealth(featureMaxHealth);
         }
 
         AttributeInstance attackDamageAttr = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
